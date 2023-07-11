@@ -1,8 +1,8 @@
-use crate::{SIUnit, Value};
+use crate::{NoUnit, SIUnit, Value};
 
 use core::{
     marker::PhantomData,
-    ops::{Add, Div, Mul, Sub},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
 };
 
 use self::sealed::Unit;
@@ -180,6 +180,16 @@ where
         }
     }
 }
+
+impl<A, B, U: Unit> AddAssign<Value<A, U>> for Value<B, U>
+where
+    B: AddAssign<A>,
+{
+    fn add_assign(&mut self, rhs: Value<A, U>) {
+        self.value.add_assign(rhs.value);
+    }
+}
+
 impl<A, B, U: Unit> Sub<Value<A, U>> for Value<B, U>
 where
     B: Sub<A>,
@@ -193,6 +203,16 @@ where
         }
     }
 }
+
+impl<A, B, U: Unit> SubAssign<Value<A, U>> for Value<B, U>
+where
+    B: SubAssign<A>,
+{
+    fn sub_assign(&mut self, rhs: Value<A, U>) {
+        self.value.sub_assign(rhs.value);
+    }
+}
+
 impl<A, B, U1: Unit, U2: Unit> Mul<Value<A, U1>> for Value<B, U2>
 where
     B: Mul<A>,
@@ -209,6 +229,15 @@ where
     }
 }
 
+impl<A, B, U: Unit> MulAssign<Value<A, NoUnit>> for Value<B, U>
+where
+    B: MulAssign<A>,
+{
+    fn mul_assign(&mut self, rhs: Value<A, NoUnit>) {
+        self.value.mul_assign(rhs.value);
+    }
+}
+
 impl<A, B, U1: Unit, U2: Unit> Div<Value<A, U1>> for Value<B, U2>
 where
     B: Div<A>,
@@ -222,6 +251,15 @@ where
             value: self.value.div(rhs.value),
             unit: PhantomData,
         }
+    }
+}
+
+impl<A, B, U: Unit> DivAssign<Value<A, NoUnit>> for Value<B, U>
+where
+    B: DivAssign<A>,
+{
+    fn div_assign(&mut self, rhs: Value<A, NoUnit>) {
+        self.value.div_assign(rhs.value);
     }
 }
 

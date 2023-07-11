@@ -19,6 +19,8 @@ pub struct SIUnit<
     const CANDELA: i32,
 >;
 
+pub type NoUnit = SIUnit<0, 0, 0, 0, 0, 0, 0>;
+
 pub type Second = SIUnit<1, 0, 0, 0, 0, 0, 0>;
 pub type Meter = SIUnit<0, 1, 0, 0, 0, 0, 0>;
 pub type Kilogram = SIUnit<0, 0, 1, 0, 0, 0, 0>;
